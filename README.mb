@@ -1,4 +1,5 @@
 需要修改pytesseract config 提升準確率
+驗證碼似乎只會出現 2346789ACDEFGHJKLNPQRTUVXYZ
 https://my.oschina.net/u/2396236/blog/1621590
 
 需要pyautogui先自行跑過修正相關的鼠標座標
@@ -11,3 +12,4 @@ run
 ```
 python3 main.py
 ```
+
