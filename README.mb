@@ -1,0 +1,8 @@
+需要修改pytesseract config 提升準確率
+https://my.oschina.net/u/2396236/blog/1621590
+
+需要pyautogui先自行跑過修正相關的鼠標座標
+```
+import pyautogui
+pyautogui.position()
+```
