@@ -1,6 +1,5 @@
 import datetime
 import os
-import re
 import shutil
 import time
 
@@ -107,8 +106,9 @@ class GetDailyMachine:
         if os.listdir(self.daily_path):
             for i in os.listdir(self.daily_path):
                 self.stocks.remove(i[:4])
-            # last_get = sorted(os.listdir(self.daily_path))[-1][:4]
-            # self.start_index = self.stocks.index(last_get)
+        self.stocks += ['excd']
+        # last_get = sorted(os.listdir(self.daily_path))[-1][:4]
+        # self.start_index = self.stocks.index(last_get)
         # else:
         #     self.start_index = 0
 
@@ -117,19 +117,18 @@ class GetDailyMachine:
             os.mkdir(f_path)
 
     def update_stocks(self):
-        url = 'https://www.tej.com.tw/webtej/doc/uid.htm'
+        url = 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=2'
+
         q = requests.get(url)
         if q.status_code == 200:
             soup = BeautifulSoup(q.text, features='lxml')
-            table = soup.find_all('table')[1]
-            get_all = table.find_all(class_='xl24')
-            new_stocks = [re.findall('>(\d+)<span', str(i))[0] for i in get_all if re.findall('>(\d+)<span', str(i))]
-            new_stocks = [i for i in new_stocks if len(i) == 4]
-            up_stocks = set(new_stocks) - set(self.stocks)
-            down_stocks = set(self.stocks) - set(new_stocks)
-            print(f'up: {up_stocks}, down: {down_stocks}')
-            self.stocks = new_stocks
-        print(f'connection error: {url}')
+            table = soup.find('table', {'class': 'h4'})
+            stock = []
+            for i in table.children:
+                all_data = [k.text for k in i.find_all('td')]
+                if len(all_data) == 7:
+                    stock.append(all_data[0].split('\u3000')[0])
+            self.stocks = [i for i in stock if len(i) == 4]
 
     def open_web(self):
         opts = Options()
@@ -150,12 +149,15 @@ class GetDailyMachine:
                 continue
             done = False
             while not done:
-                start_time = time.time()
+
                 if os.path.isfile(self.captcha_pic_path):
                     os.remove(self.captcha_pic_path)
 
                 self.driver.refresh()
-                self._enter_stock_id(check_stock_id)
+                if check_stock_id == 'excd':
+                    self._click_excd_deal()
+                else:
+                    self._enter_stock_id(check_stock_id)
                 self._save_captcha_img()
 
                 time.sleep(0.3)
@@ -235,8 +237,11 @@ class GetDailyMachine:
             result = pytesseract.image_to_string(dilation, config='stock_1').replace(' ', '')
             cv2.destroyAllWindows()
         else:
-            result = '0'
+            result = ''
         return result
+
+    def _click_excd_deal(self):
+        pyautogui.click(x=88, y=339, duration=0.1)
 
 
 if __name__ == '__main__':
