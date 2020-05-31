@@ -13,3 +13,12 @@ run
 python3 main.py
 ```
 
+2020/5/31
+todo: 出現error
+OSError: [Errno 23] Too many open files in system
+sudo ulimit -n 2048
+
+error: (-215:Assertion failed) dims <= 2 && step[0] > 0 in function 'locateROI'
+
+todo: 更新股票代碼的方式
+https://leemeng.tw/beautifulsoup-cheat-sheet.html
