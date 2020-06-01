@@ -231,10 +231,22 @@ class GetDailyMachine:
     def _image_recognition_for_captcha(self):
         if os.path.isfile(self.captcha_pic_path):
             target = cv2.imread(self.captcha_pic_path)
-            kernel = np.ones((4, 4), np.uint8)
+            kernel = np.ones((3, 3), np.uint8)
             erosion = cv2.erode(target, kernel, iterations=1)
-            blurred = cv2.GaussianBlur(erosion, (5, 5), 0)
-            edged = cv2.Canny(blurred, 30, 150)
+            result = pytesseract.image_to_string(erosion, config='stock_1').replace(' ', '')
+            if len(result) == 5:
+                cv2.destroyAllWindows()
+                return result
+            blurred = cv2.GaussianBlur(erosion, (3, 3), 0)
+            result = pytesseract.image_to_string(blurred, config='stock_1').replace(' ', '')
+            if len(result) == 5:
+                cv2.destroyAllWindows()
+                return result
+            edged = cv2.Canny(blurred, 50, 600)
+            result = pytesseract.image_to_string(edged, config='stock_1').replace(' ', '')
+            if len(result) == 5:
+                cv2.destroyAllWindows()
+                return result
             dilation = cv2.dilate(edged, kernel, iterations=1)
             result = pytesseract.image_to_string(dilation, config='stock_1').replace(' ', '')
             cv2.destroyAllWindows()
