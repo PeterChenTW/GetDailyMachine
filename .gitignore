@@ -1,4 +1,4 @@
 /.idea/
 /daily/*/*.csv
-/daily/
+/daily/*
 worksplace.ipynb

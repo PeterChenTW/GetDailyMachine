@@ -18,7 +18,7 @@ from selenium.webdriver.chrome.options import Options
 class GetDailyMachine:
     stock_url = 'https://bsr.twse.com.tw/bshtm/'
     py_path = os.path.abspath(os.path.dirname(__file__))
-    download_path = '/Users/csro/Downloads'
+    download_path = '/Users/yushi.chen/Downloads'
     captcha_pic_path = f'{download_path}/CaptchaImage.jpeg'
     today = str(datetime.date.today())
     daily_path = f'{py_path}/daily/{today}'
@@ -169,7 +169,7 @@ class GetDailyMachine:
                 result = self._image_recognition_for_captcha()
 
                 self._enter_captcha(result)
-
+                time.sleep(0.2)
                 while locateOnScreen(f'{self.pic_path}/error_pic_2.png'):
                     print('error! try more!')
                     if os.path.isfile(self.captcha_pic_path):
@@ -178,16 +178,18 @@ class GetDailyMachine:
 
                     result = self._image_recognition_for_captcha()
                     self._enter_captcha(result)
-
+                    time.sleep(0.2)
                 if locateOnScreen(f'{self.pic_path}/no_data_pic.png'):
                     done = True
                     continue
 
                 self._download_data()
-                time.sleep(1)
+                time.sleep(0.5)
                 if not os.path.isfile(f'{self.download_path}/{check_stock_id}.csv'):
                     print('error! try more!')
                     continue
+                shutil.move(self.captcha_pic_path,
+                            f'{self.py_path}/captcha_data/{result}.png')
                 done = True
                 shutil.move(f'{self.download_path}/{check_stock_id}.csv',
                             f'{self.daily_path}/{check_stock_id}.csv')
@@ -211,7 +213,7 @@ class GetDailyMachine:
         # pyautogui.press('enter')
         start_time = time.time()
         while not os.path.isfile(self.captcha_pic_path):
-            if time.time() - start_time >= 5:
+            if time.time() - start_time >= 3:
                 break
             pyautogui.click(x=737, y=313)
 
