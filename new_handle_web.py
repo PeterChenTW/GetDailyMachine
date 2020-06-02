@@ -164,7 +164,7 @@ class GetDailyMachine:
                     print(
                         f'no data: {check_stock_id}, '
                         f'current: {index + 1}/{get_number}, '
-                        f'estimate time: {round((get_number - index - 1) * (time.time() - start_time) / (index + 1), 4)},'
+                        f'estimate time: {round((get_number - index - 1) * (time.time() - start_time) / (index + 1), 4)}, '
                         f'total cost time: {round(time.time() - start_time, 4)}')
 
                     continue
@@ -175,7 +175,7 @@ class GetDailyMachine:
                 print(
                     f'download data: {check_stock_id}, '
                     f'current: {index + 1}/{get_number}, '
-                    f'estimate time: {round((get_number - index - 1) * (time.time() - start_time) / (index + 1), 4)},'
+                    f'estimate time: {round((get_number - index - 1) * (time.time() - start_time) / (index + 1), 4)}, '
                     f'total cost time: {round(time.time() - start_time, 4)}')
 
                 if save_captcha:
