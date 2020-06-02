@@ -134,12 +134,14 @@ class GetDailyMachine:
 
         self.driver.get(self.stock_url)
 
-    def get_stocks_data(self):
+    def get_stocks_data(self, save_captcha=False):
         if self.driver is None:
             print('first run open_web')
             return
-
-        for check_stock_id in self.stocks:
+        start_time = time.time()
+        get_number = len(self.stocks)
+        download_done = []
+        for index, check_stock_id in enumerate(self.stocks):
             done = False
             while not done:
                 if os.path.isfile(f'{self.py_path}/{check_stock_id}.csv'):
@@ -150,24 +152,38 @@ class GetDailyMachine:
                 result = self._some_action(check_stock_id)
 
                 while self._error_msg('驗證碼'):
-                    shutil.move(self.captcha_pic_path,
-                                f'{self.py_path}/captcha_data/error/{result}.png')
+                    if save_captcha:
+                        shutil.move(self.captcha_pic_path,
+                                    f'{self.py_path}/captcha_data/error/{result}.png')
                     print(f'captcha error! {result}')
                     result = self._some_action(check_stock_id)
                     time.sleep(0.2)
 
                 if self._error_msg('查無資'):
                     done = True
+                    print(
+                        f'no data: {check_stock_id}, '
+                        f'current: {index + 1}/{get_number}, '
+                        f'estimate time: {round((get_number - index - 1) * (time.time() - start_time) / (index + 1), 4)},'
+                        f'total cost time: {round(time.time() - start_time, 4)}')
+
                     continue
 
                 self._download_data()
+                download_done.append(check_stock_id)
                 time.sleep(0.5)
-                print(f'download csv: {check_stock_id}')
-                shutil.move(self.captcha_pic_path,
-                            f'{self.py_path}/captcha_data/{result}.png')
-                done = True
+                print(
+                    f'download data: {check_stock_id}, '
+                    f'current: {index + 1}/{get_number}, '
+                    f'estimate time: {round((get_number - index - 1) * (time.time() - start_time) / (index + 1), 4)},'
+                    f'total cost time: {round(time.time() - start_time, 4)}')
 
-        for check_stock_id in self.stocks:
+                if save_captcha:
+                    shutil.move(self.captcha_pic_path,
+                                f'{self.py_path}/captcha_data/{result}.png')
+                done = True
+        print(f'need to move: {download_done}')
+        for check_stock_id in download_done:
             shutil.move(f'{self.py_path}/{check_stock_id}.csv',
                         f'{self.daily_path}/{check_stock_id}.csv')
 

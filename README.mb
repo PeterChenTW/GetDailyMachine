@@ -3,18 +3,15 @@
 ## 驗證碼似乎只會出現 
  2346789ACDEFGHJKLNPQRTUVXYZ
 https://my.oschina.net/u/2396236/blog/1621590
-## pyautogui
-需要pyautogui先自行跑過修正相關的鼠標座標
-```
-import pyautogui
-pyautogui.position()
+
+
 ### DB information
 ### 透過 ssh -N -L 3306:localhost:3306 username@阿里IP
     IP:localhost
     Port:3306
     User: root 
     Password: password
-    DB: stock```
+    DB: stock
 
 run
 ```
@@ -41,3 +38,6 @@ https://leemeng.tw/beautifulsoup-cheat-sheet.html
 2020/06/02
 更新版本: 移除pyautogui
 把錯的captcha 存入 captcha_data/error
+
+todo: linux use method
+https://www.cnblogs.com/ZFBG/p/10997040.html

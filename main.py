@@ -9,4 +9,6 @@ if __name__ == '__main__':
             machine.get_stocks_data()
             done = True
         except Exception as e:
+            machine.driver.close()
+            machine.open_web()
             print(f'error {e}')
