@@ -19,6 +19,7 @@ python3 main.py
     time sleep one second after bot has saved the captcha
 
     OSError: [Errno 23] Too many open files in system
+    https://stackoverflow.com/questions/16526783/python-subprocess-too-many-open-files
     sudo ulimit -n 4096
     ulimt -a -> 可以看limit
 
@@ -29,3 +30,7 @@ https://leemeng.tw/beautifulsoup-cheat-sheet.html
 
 2020/06/01
 1. auto save captcha if the captcha pass
+
+2020/06/02
+更新版本: 移除pyautogui
+把錯的captcha 存入 captcha_data/error

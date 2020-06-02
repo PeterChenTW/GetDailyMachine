@@ -2,3 +2,6 @@
 /daily/*/*.csv
 /daily/*
 worksplace.ipynb
+/.ipynb_checkpoints/
+.DS_Store
+*.csv
