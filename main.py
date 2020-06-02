@@ -2,6 +2,7 @@ from new_handle_web import GetDailyMachine
 
 if __name__ == '__main__':
     machine = GetDailyMachine()
+    # machine.update_stocks()
     machine.open_web()
     done = False
     while not done:
