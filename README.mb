@@ -1,12 +1,20 @@
-需要修改pytesseract config 提升準確率
-驗證碼似乎只會出現 2346789ACDEFGHJKLNPQRTUVXYZ
+##提升準確率 
+ 需要修改pytesseract config 
+## 驗證碼似乎只會出現 
+ 2346789ACDEFGHJKLNPQRTUVXYZ
 https://my.oschina.net/u/2396236/blog/1621590
-
+## pyautogui
 需要pyautogui先自行跑過修正相關的鼠標座標
 ```
 import pyautogui
 pyautogui.position()
-```
+### DB information
+### 透過 ssh -N -L 3306:localhost:3306 username@阿里IP
+    IP:localhost
+    Port:3306
+    User: root 
+    Password: password
+    DB: stock```
 
 run
 ```
