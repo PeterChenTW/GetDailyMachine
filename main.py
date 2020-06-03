@@ -12,4 +12,4 @@ if __name__ == '__main__':
         except Exception as e:
             machine.driver.close()
             machine.open_web()
-            print(f'error {e}')
+            # print(f'error {e}')
