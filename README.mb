@@ -45,3 +45,7 @@ https://www.cnblogs.com/ZFBG/p/10997040.html
 2020/06/03
 add mysql
 https://dev.mysql.com/doc/connector-python/en/connector-python-examples.html
+
+selenium.common.exceptions.WebDriverException: Message: unknown error: Chrome failed to start: crashed.
+  (chrome not reachable)
+  (The process started from chrome location /Applications/Google Chrome.app/Contents/MacOS/Google Chrome is no longer running, so ChromeDriver is assuming that Chrome has crashed.)

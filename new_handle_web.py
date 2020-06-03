@@ -18,7 +18,7 @@ from selenium.webdriver.chrome.options import Options
 class GetDailyMachine:
     stock_url = 'https://bsr.twse.com.tw/bshtm/bsMenu.aspx'
     py_path = os.path.abspath(os.path.dirname(__file__))
-    download_path = '/Users/yushi.chen/Downloads'
+    download_path = '/Users/csro/Downloads'
     captcha_pic_path = f'{download_path}/CaptchaImage.jpeg'
     today = str(datetime.date.today())
     daily_path = f'{py_path}/daily/{today}'
