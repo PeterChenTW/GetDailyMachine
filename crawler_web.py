@@ -1,3 +1,4 @@
+import configparser
 import datetime
 import json
 import os
@@ -13,12 +14,15 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 
 # setting
 class GetDailyMachine:
-    stock_url = 'https://bsr.twse.com.tw/bshtm/bsMenu.aspx'
+    stock_url = config['crawler']['get_url_1']
     py_path = os.path.abspath(os.path.dirname(__file__))
-    download_path = '/Users/csro/Downloads'
+    download_path = config['crawler']['download_path']
     captcha_pic_path = f'{download_path}/CaptchaImage.jpeg'
     today = str(datetime.date.today())
     daily_path = f'{py_path}/daily/{today}'
@@ -26,7 +30,8 @@ class GetDailyMachine:
 
     driver = None
 
-    def __init__(self):
+    def __init__(self, show_web=False):
+        self.show_web = show_web
         self.check_add_folder(f'{self.py_path}/daily')
         self.check_add_folder(self.daily_path)
         self.download_done, self.no_data = deque(), deque()
@@ -47,32 +52,52 @@ class GetDailyMachine:
             os.mkdir(f_path)
 
     def update_stocks(self):
-        url = 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=2'
+        url = config['crawler']['get_url_2']
+        while True:
+            try:
+                q = requests.get(url, verify=False, timeout=5)
 
-        q = requests.get(url)
-        if q.status_code == 200:
-            soup = BeautifulSoup(q.text, features='lxml')
-            table = soup.find('table', {'class': 'h4'})
-            stock = []
-            for i in table.children:
-                all_data = [k.text for k in i.find_all('td')]
-                if len(all_data) == 7:
-                    context = all_data[0].split('\u3000')[0]
-                    if len(context) == 4:
-                        stock.append(context)
-            json_stock = json.dumps(stock)
-            with open(f'{self.py_path}/stock_list.json', 'w') as fp:
-                fp.write(json_stock)
+                if q.status_code == 200:
+                    print('url status ok')
+                    soup = BeautifulSoup(q.text, features='lxml')
+                    table = soup.find('table', {'class': 'h4'})
+                    stock = []
+                    for i in table.children:
+                        all_data = [k.text for k in i.find_all('td')]
+                        if len(all_data) == 7:
+                            context = all_data[0].split('\u3000')[0]
+                            if len(context) == 4:
+                                stock.append(context)
+                    print('parse over')
+                    json_stock = json.dumps(stock)
+                    print('json over')
+                    with open(f'{self.py_path}/stock_list.json', 'w') as fp:
+                        fp.write(json_stock)
+                    print('save over')
+                else:
+                    print(f'web :{url}')
+                break
+            except:
+                print('reconnection...')
+                pass
 
     def open_web(self):
         opts = Options()
-        opts.add_argument("--headless")
+        if not self.show_web:
+            opts.add_argument("--headless")
         # opts.add_argument("--incognito")
         ua = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0"
         opts.add_argument("user-agent={}".format(ua))
         self.driver = webdriver.Chrome(self.py_path + '/chromedriver', chrome_options=opts)
 
         self.driver.get(self.stock_url)
+
+    def close_web(self):
+        self.driver.close()
+
+    def refresh_driver(self):
+        time.sleep(0.5)
+        self.driver.refresh()
 
     def get_stocks_data(self, save_captcha=False):
         if self.driver is None:
@@ -120,7 +145,8 @@ class GetDailyMachine:
                                 f'{self.py_path}/captcha_data/{result}.png')
                 done = True
         print(f'need to move: {self.download_done}')
-        for check_stock_id in self.download_done:
+
+        for check_stock_id in list(self.download_done)[::-1]:
             shutil.move(f'{self.py_path}/{check_stock_id}.csv',
                         f'{self.daily_path}/{check_stock_id}.csv')
         print('done!!!!')

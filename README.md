@@ -1,3 +1,6 @@
+## 
+ modify config.ini
+
 ##提升準確率 
  需要修改pytesseract config 
 ## 驗證碼似乎只會出現 
@@ -12,11 +15,6 @@ https://my.oschina.net/u/2396236/blog/1621590
     User: root 
     Password: password
     DB: stock
-
-run
-```
-python3 main.py
-```
 
 2020/5/31
 1. error
