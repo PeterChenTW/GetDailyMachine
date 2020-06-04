@@ -12,7 +12,8 @@ if __name__ == '__main__':
     while not done:
         try:
             machine.get_stocks_data()
-            done = True
+            if machine.check_all_done:
+                done = True
         except Exception as e:
             machine.refresh_driver()
             # machine.open_web()

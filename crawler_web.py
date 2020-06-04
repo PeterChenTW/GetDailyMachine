@@ -34,7 +34,7 @@ class GetDailyMachine:
         self.show_web = show_web
         self.check_add_folder(f'{self.py_path}/daily')
         self.check_add_folder(self.daily_path)
-        self.download_done, self.no_data = deque(), deque()
+        self.download_done, self.no_data = [], deque()
 
         with open('stock_list.json', 'r') as fp:
             self.stocks = json.load(fp)
@@ -95,8 +95,12 @@ class GetDailyMachine:
     def close_web(self):
         self.driver.close()
 
+    def check_all_done(self):
+        yet_done = set(self.stocks) - set([i[:4] for i in os.listdir(self.daily_path)] + list(self.no_data))
+        return len(yet_done) == 0
+
     def refresh_driver(self):
-        time.sleep(0.5)
+        time.sleep(2)
         self.driver.refresh()
 
     def get_stocks_data(self, save_captcha=False):
@@ -104,10 +108,9 @@ class GetDailyMachine:
             print('first run open_web')
             return
 
-        for i in self.download_done:
-            if i in self.stocks:
-                self.stocks.remove(i)
-        for i in self.no_data:
+        self._update_download_done()
+
+        for i in list(self.no_data) + self.download_done:
             if i in self.stocks:
                 self.stocks.remove(i)
 
@@ -136,7 +139,6 @@ class GetDailyMachine:
                     continue
 
                 self._download_data()
-                self.download_done.append(check_stock_id)
 
                 self._print_cost_time(check_stock_id, 'download')
 
@@ -144,17 +146,21 @@ class GetDailyMachine:
                     shutil.move(self.captcha_pic_path,
                                 f'{self.py_path}/captcha_data/{result}.png')
                 done = True
-        print(f'need to move: {self.download_done}')
 
-        for check_stock_id in list(self.download_done)[::-1]:
+        time.sleep(5)
+        self._update_download_done()
+
+        for check_stock_id in self.download_done:
             shutil.move(f'{self.py_path}/{check_stock_id}.csv',
                         f'{self.daily_path}/{check_stock_id}.csv')
+        print(f'no data: {self.no_data}')
         print('done!!!!')
 
     def _print_cost_time(self, stock_id, done_type):
+        self._update_download_done()
         done_number = len(self.download_done) + len(self.no_data)
         cur_time = time.time()
-        avg_time = (cur_time - self.start_time) / done_number
+        avg_time = (cur_time - self.start_time) / (done_number if done_number else 1)
 
         print(
             f'stock: {stock_id}, '
@@ -163,6 +169,9 @@ class GetDailyMachine:
             f'avg. time: {round(avg_time, 4)}, '
             f'estimate total time: {round(self.get_number * avg_time, 4)}, '
             f'current cost time: {round(cur_time - self.start_time, 4)}')
+
+    def _update_download_done(self):
+        self.download_done = [i[:4] for i in os.listdir(self.py_path) if i[-3:] == 'csv']
 
     def _init_action(self):
         if os.path.isfile(self.captcha_pic_path):
