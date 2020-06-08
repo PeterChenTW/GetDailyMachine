@@ -17,6 +17,14 @@ class StockDB:
     def close_connection(self):
         self.cnx.close()
 
+    def once_insert_into_stock_history(self, txt_path):
+        cursor = self.cnx.cursor()
+        sql = (f"LOAD DATA INFILE '{txt_path}' INTO TABLE `stock_history`"
+               f"FIELDS TERMINATED BY ',';")
+        cursor.execute(sql)
+        self.cnx.commit()
+        cursor.close()
+
     def insert_into_stock_history(self, broker_index, stock, price, buy, sell, date):
         """
         :param broker_index: int
@@ -97,8 +105,8 @@ class StockDB:
 if __name__ == '__main__':
     DB = StockDB()
     DB.connection()
-    DB.init_table()
+    # DB.init_table()
     # DB.insert_into_broker(1112, 'e04su3')
-    DB.select_broker_index_exist(12)
+    print(DB.select_broker_index_exist(12))
     # DB.insert_into_stock_history(111, 2330, 11.0, 1100, 0, date(2000, 6, 4))
     DB.close_connection()
