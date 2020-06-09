@@ -105,8 +105,9 @@ class StockDB:
 if __name__ == '__main__':
     DB = StockDB()
     DB.connection()
-    # DB.init_table()
+    DB.init_table()
     # DB.insert_into_broker(1112, 'e04su3')
-    print(DB.select_broker_index_exist(12))
+    # print(DB.select_broker_index_exist(12))
+    # from datetime import date
     # DB.insert_into_stock_history(111, 2330, 11.0, 1100, 0, date(2000, 6, 4))
     DB.close_connection()
