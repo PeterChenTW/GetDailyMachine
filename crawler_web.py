@@ -22,8 +22,7 @@ config.read('config.ini')
 class GetDailyMachine:
     stock_url = config['crawler']['get_url_1']
     py_path = os.path.abspath(os.path.dirname(__file__))
-    download_path = config['crawler']['download_path']
-    captcha_pic_path = f'{download_path}/CaptchaImage.jpeg'
+    captcha_pic_path = f'{py_path}/CaptchaImage.jpeg'
     today = str(datetime.date.today())
     daily_path = f'{py_path}/daily/{today}'
     pic_path = py_path + '/pic'
@@ -172,6 +171,7 @@ class GetDailyMachine:
 
     def _update_download_done(self):
         self.download_done = [i[:4] for i in os.listdir(self.py_path) if i[-3:] == 'csv']
+        self.download_done += [i[:4] for i in os.listdir(self.daily_path) if i[-3:] == 'csv']
 
     def _init_action(self):
         if os.path.isfile(self.captcha_pic_path):
