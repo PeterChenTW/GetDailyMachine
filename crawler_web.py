@@ -13,6 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -88,7 +89,7 @@ class GetDailyMachine:
         # opts.add_argument("--incognito")
         ua = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0"
         opts.add_argument("user-agent={}".format(ua))
-        self.driver = webdriver.Chrome(self.py_path + '/chromedriver', chrome_options=opts)
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=opts)
         # self.driver = webdriver.Chrome(chrome_options=opts)
         self.driver.get(self.stock_url)
 
