@@ -1,11 +1,12 @@
 import configparser
+import os
 
 import mysql.connector
 
 
 class StockDB:
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read(f'{os.path.abspath(os.path.dirname(__file__))}/config.ini')
     mysql_info = config['mysql']
 
     def connection(self):

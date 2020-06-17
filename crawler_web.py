@@ -16,7 +16,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(f'{os.path.abspath(os.path.dirname(__file__))}/config.ini')
 
 
 # setting

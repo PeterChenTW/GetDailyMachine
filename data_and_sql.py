@@ -7,7 +7,7 @@ import pandas as pd
 import sqlalchemy
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(f'{os.path.abspath(os.path.dirname(__file__))}/config.ini')
 mysql_info = config['mysql']
 
 
