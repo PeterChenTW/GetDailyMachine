@@ -13,6 +13,7 @@ if __name__ == '__main__':
         machine.open_web()
 
         done = False
+        error = 0
         while not done:
             try:
                 machine.get_stocks_data()
@@ -21,8 +22,11 @@ if __name__ == '__main__':
                 if machine.check_all_done():
                     done = True
             except Exception as e:
-                machine.refresh_driver()
-                # machine.open_web()
+                error += 1
+                if error % 20:
+                    machine.refresh_driver()
+                else:
+                    machine.open_web()
                 print(f'error {e}')
         machine.close_web()
         del machine
