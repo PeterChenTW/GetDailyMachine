@@ -36,7 +36,7 @@ class GetDailyMachine:
         self.check_add_folder(self.daily_path)
         self.download_done, self.no_data = [], deque()
 
-        with open('stock_list.json', 'r') as fp:
+        with open(f'{self.py_path}/stock_list.json', 'r') as fp:
             self.stocks = json.load(fp)
 
         self.stocks += ['excd']
