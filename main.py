@@ -34,6 +34,7 @@ def job():
     del machine
 
 
+start_time = input('you want to start time. 09:00')
 schedule.every().day.at('09:00').do(job)
 
 if __name__ == '__main__':
