@@ -22,6 +22,7 @@ def job():
             print(machine.check_all_done())
             time.sleep(5)
             if machine.check_all_done():
+                print('over!')
                 done = True
         except Exception as e:
             error += 1
