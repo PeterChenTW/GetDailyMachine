@@ -6,6 +6,8 @@ from crawler_web import GetDailyMachine
 
 
 def job():
+    done = False
+    error = 0
     machine = GetDailyMachine(show_web=False)
     # print(machine.check_all_done())
     # update stock_list.json
@@ -14,13 +16,11 @@ def job():
     # get data
     machine.open_web()
 
-    done = False
-    error = 0
     while not done:
         try:
             machine.get_stocks_data()
+            time.sleep(100)
             print(machine.check_all_done())
-            time.sleep(5)
             if machine.check_all_done():
                 print('over!')
                 done = True
@@ -32,7 +32,7 @@ def job():
                 machine.open_web()
             print(f'error {e}')
     machine.close_web()
-    del machine
+    del machine, done, error
 
 
 start_time = input('you want to start time. 09:00:')
