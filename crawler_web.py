@@ -37,7 +37,7 @@ class GetDailyMachine:
 
         with open(f'{self.py_path}/stock_list.json', 'r') as fp:
             self.stocks = json.load(fp)
-
+        self.ori_stocks = self.stocks.copy()
         self.stocks += ['excd']
 
         for i in os.listdir(self.daily_path):
@@ -97,7 +97,7 @@ class GetDailyMachine:
         self.driver.close()
 
     def check_all_done(self):
-        yet_done = set(self.stocks) - set([i[:4] for i in os.listdir(self.daily_path)] + list(self.no_data))
+        yet_done = set(self.ori_stocks) - set([i[:4] for i in os.listdir(self.daily_path)] + list(self.no_data))
         return len(yet_done) == 0
 
     def refresh_driver(self):
