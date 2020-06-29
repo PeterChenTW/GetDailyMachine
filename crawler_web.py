@@ -21,16 +21,15 @@ config.read(f'{os.path.abspath(os.path.dirname(__file__))}/config.ini')
 
 # setting
 class GetDailyMachine:
-    stock_url = config['crawler']['get_url_1']
-    py_path = os.path.abspath(os.path.dirname(__file__))
-    captcha_pic_path = f'{py_path}/CaptchaImage.jpeg'
-    today = str(datetime.date.today())
-    daily_path = f'{py_path}/daily/{today}'
-    pic_path = py_path + '/pic'
-
-    driver = None
-
     def __init__(self, show_web=False):
+        self.stock_url = config['crawler']['get_url_1']
+        self.py_path = os.path.abspath(os.path.dirname(__file__))
+        self.captcha_pic_path = f'{self.py_path}/CaptchaImage.jpeg'
+        self.today = str(datetime.date.today())
+        self.daily_path = f'{self.py_path}/daily/{self.today}'
+        self.pic_path = self.py_path + '/pic'
+
+        self.driver = None
         self.show_web = show_web
         self.check_add_folder(f'{self.py_path}/daily')
         self.check_add_folder(self.daily_path)
