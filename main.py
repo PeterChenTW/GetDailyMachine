@@ -1,8 +1,10 @@
+import os
 import time
 
 import schedule
 
 from crawler_web import GetDailyMachine
+from mail_system import send
 
 
 def job():
@@ -22,6 +24,15 @@ def job():
             time.sleep(100)
             print(machine.check_all_done())
             if machine.check_all_done():
+                target = machine.ori_stocks
+                get_file = [i[:4] for i in os.listdir(machine.daily_path)]
+                no_data = list(machine.no_data)
+                yet_done = set(target) - set(get_file + no_data)
+                send_string = f"""target: {target},\n
+                                  get_file: {get_file},\n 
+                                  no data: {no_data},\n
+                                  yet not: {yet_done}"""
+                send(f"Daily Stock report - {machine.today}", send_string)
                 print('over!')
                 done = True
         except Exception as e:
