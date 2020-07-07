@@ -1,5 +1,7 @@
 """
 https://blog.taiker.space/python-how-to-send-an-email-with-python/
+update:
+https://www.learncodewithmike.com/2020/02/python-email.html
 """
 import configparser
 import os
@@ -23,7 +25,7 @@ def send(subject, body):
 
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.ehlo()
-    
+
     server.login(account, password)
     text = msg.as_string()
     server.sendmail(msg['From'], msg['To'], text)
