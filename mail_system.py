@@ -30,4 +30,4 @@ def send(subject, body):
 
 
 if __name__ == '__main__':
-    send('cool')
+    send('hi', 'cool')
